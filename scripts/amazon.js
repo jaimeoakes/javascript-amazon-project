@@ -71,14 +71,14 @@ document.querySelectorAll('.js-add-to-cart')
       });
 
       const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
-      const selectQuantity = Number(quantitySelector.value);
+      const quantity = Number(quantitySelector.value);
 
       if (matchingItem) {
-        matchingItem.quantity += selectQuantity;
+        matchingItem.quantity += quantity;
       } else {
         cart.push({
           productId,
-          quantity: selectQuantity
+          quantity
         });
       }
 
