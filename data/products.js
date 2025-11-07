@@ -665,7 +665,7 @@ const products = [
     stars: 3.0,
     count: 1000
   },
-  priceCents: 800,
+  priceCents: 8000,
   keywords: [
     "rain", 
     "sun", 
@@ -680,7 +680,7 @@ const products = [
     stars: 4.0,
     count: 2350
   },
-  priceCents: 500,
+  priceCents: 5000,
   keywords: [
     "beauty", 
     "image", 
