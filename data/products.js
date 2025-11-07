@@ -656,5 +656,35 @@ const products = [
       "apparel",
       "mens"
     ]
-  }
+  },
+  {
+  id: "bc2847e9-5323-403f-b7cf-57f77777777",
+  image: "images/products/umbrella.jpg",
+  name: "Raining's Umbrella",
+  rating: {
+    stars: 3.0,
+    count: 1000
+  },
+  priceCents: 800,
+  keywords: [
+    "rain", 
+    "sun", 
+    "weather"
+  ]
+},
+{
+  id: "bc2847e9-5323-403f-b7cf-57f888888888",
+  image: "images/products/vanity-mirror-silver.jpg",
+  name: "Makeup Mirror",
+  rating: {
+    stars: 4.0,
+    count: 2350
+  },
+  priceCents: 500,
+  keywords: [
+    "beauty", 
+    "image", 
+    "mirror"
+  ]
+}
 ];
