@@ -110,4 +110,19 @@ document.querySelectorAll('.js-delete-link')
     });
   });
 
-    
+
+function updateCheckoutQuantity(cart) {
+  let checkoutCartQuantity = 0;
+
+  cart.forEach((product) => {
+    checkoutCartQuantity += product.quantity;
+  });
+  return checkoutCartQuantity;
+}
+
+const totalItems = updateCheckoutQuantity(cart);
+
+document.querySelector('.js-checkout-quantity').innerHTML = `
+    Checkout (<a class="return-to-home-link"
+      href="amazon.html">${totalItems}</a>)
+  `;
