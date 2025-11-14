@@ -92,3 +92,5 @@ buttons.forEach((button) => {
     }, 2000);
   });
 });
+
+updateCartQuantity();
