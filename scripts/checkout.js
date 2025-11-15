@@ -120,17 +120,15 @@ document.querySelectorAll('.js-delete-link')
       // 1. Remove from cart
       removeFromCart(productId);
 
-      // 2. Update header cart quantity
-      updateCartQuantity();
+       // 2. Atualizar o número de itens no checkout (FALTANDO!)
+      updateCheckoutQuantity();
 
       // 3. Remove the container from the page
       const container = document.querySelector(
         `.js-cart-item-container-${productId}`
       );
-      container.remove();
 
-      // 4. Update the checkout title quantity
-      updateCheckoutQuantity();
+      container.remove();
     });
   });
 
@@ -155,20 +153,3 @@ function updateCheckoutQuantity() {
 
 // Run once on page load
 updateCheckoutQuantity();
-
-
-// Update Header Cart Quantity
-
-function updateCartQuantity() {
-  let headerCartQuantity = 0;
-
-  cart.forEach((cartItem) => {
-    headerCartQuantity += cartItem.quantity;
-  });
-
-  // Only update if .js-cart-quantity exists
-  const headerElement = document.querySelector('.js-cart-quantity');
-  if (headerElement) {
-    headerElement.innerHTML = headerCartQuantity;
-  }
-}
