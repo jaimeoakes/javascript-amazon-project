@@ -2,7 +2,9 @@ import { cart, removeFromCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js"; 
 
-// Render the cart items
+/******************************************
+ * RENDER ORDER SUMMARY (cart items)
+ ******************************************/
 
 let cartSummaryHTML = '';
 
@@ -39,19 +41,31 @@ cart.forEach((cartItem) => {
 
           <div class="product-quantity">
             <span>
-              Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+              Quantity: 
+              <span class="quantity-label js-quantity-label-${matchingProduct.id}">
+                ${cartItem.quantity}
+              </span>
             </span>
 
+            <!-- UPDATE -->
             <span class="update-quantity-link link-primary js-update-link"
-            data-product-id="${matchingProduct.id}">
+                  data-product-id="${matchingProduct.id}">
               Update
             </span>
 
-            <input class='quantity-input'>
-            <span class='save-quantity-link link-primary'>Save</span> 
+            <!-- INPUT PARA EDITAR -->
+            <input class="quantity-input js-quantity-input-${matchingProduct.id}"
+                   type="number" min="1">
 
+            <!-- SAVE -->
+            <span class="save-quantity-link link-primary js-save-link"
+                  data-product-id="${matchingProduct.id}">
+              Save
+            </span>
+
+            <!-- DELETE -->
             <span class="delete-quantity-link link-primary js-delete-link" 
-              data-product-id="${matchingProduct.id}">
+                  data-product-id="${matchingProduct.id}">
               Delete
             </span>
           </div>
@@ -113,7 +127,9 @@ cart.forEach((cartItem) => {
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
 
-// Delete buttons
+/******************************************
+ * DELETE BUTTONS
+ ******************************************/
 
 document.querySelectorAll('.js-delete-link')
   .forEach((buttonDelete) => {
@@ -124,10 +140,10 @@ document.querySelectorAll('.js-delete-link')
       // 1. Remove from cart
       removeFromCart(productId);
 
-       // 2. Atualizar o número de itens no checkout (FALTANDO!)
+      // 2. Update checkout number
       updateCheckoutQuantity();
 
-      // 3. Remove the container from the page
+      // 3. Remove from page
       const container = document.querySelector(
         `.js-cart-item-container-${productId}`
       );
@@ -137,7 +153,10 @@ document.querySelectorAll('.js-delete-link')
   });
 
 
-// Update Checkout Quantity
+
+/******************************************
+ * UPDATE CHECKOUT TITLE QUANTITY
+ ******************************************/
 
 function updateCheckoutQuantity() {
   let checkoutCartQuantity = 0;
@@ -158,15 +177,69 @@ function updateCheckoutQuantity() {
 // Run once on page load
 updateCheckoutQuantity();
 
+
+
+/******************************************
+ * UPDATE BUTTON – ENTER EDIT MODE
+ ******************************************/
+
 const buttonsUpdate = document.querySelectorAll('.js-update-link');
 
 buttonsUpdate.forEach((buttonUpdate) => {
   buttonUpdate.addEventListener('click', () => {
+
     const productId = buttonUpdate.dataset.productId;
-    
+
     const container = document.querySelector(
-        `.js-cart-item-container-${productId}`);
+      `.js-cart-item-container-${productId}`
+    );
+
     container.classList.add("is-editing-quantity");
   });
 });
-  
+
+
+
+/******************************************
+ * SAVE BUTTON – EXIT EDIT MODE + UPDATE DATA
+ ******************************************/
+
+const saveButtons = document.querySelectorAll('.js-save-link');
+
+saveButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+
+    const productId = button.dataset.productId;
+
+    const container = document.querySelector(
+      `.js-cart-item-container-${productId}`
+    );
+
+    // 1. Exit editing mode
+    container.classList.remove("is-editing-quantity");
+
+    // 2. Get new quantity
+    const input = document.querySelector(
+      `.js-quantity-input-${productId}`
+    );
+
+    const newQuantity = Number(input.value);
+
+    // 3. Update the cart array
+    cart.forEach(item => {
+      if (item.productId === productId) {
+        item.quantity = newQuantity;
+      }
+    });
+
+    // 4. Update label on screen
+    document.querySelector(`.js-quantity-label-${productId}`).innerText =
+      newQuantity;
+
+    // 5. Update checkout header
+    updateCheckoutQuantity();
+
+    // 6. Save to localStorage (if used in your project)
+    localStorage.setItem('cart', JSON.stringify(cart));
+  });
+});
