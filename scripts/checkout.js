@@ -1,4 +1,4 @@
-import { cart, removeFromCart } from "../data/cart.js";
+import { cart, removeFromCart, updateQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js"; 
 
@@ -195,6 +195,13 @@ buttonsUpdate.forEach((buttonUpdate) => {
     );
 
     container.classList.add("is-editing-quantity");
+
+    // 🔥 PREENCHE O INPUT COM A QUANTIDADE ATUAL
+    const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);
+    const input = document.querySelector(`.js-quantity-input-${productId}`);
+
+    input.value = quantityLabel.innerText.trim();
+    input.focus();
   });
 });
 
@@ -225,12 +232,13 @@ saveButtons.forEach((button) => {
 
     const newQuantity = Number(input.value);
 
-    // 3. Update the cart array
-    cart.forEach(item => {
-      if (item.productId === productId) {
-        item.quantity = newQuantity;
-      }
-    });
+    if (newQuantity <= 0 || newQuantity > 1000 || isNaN(newQuantity)) {
+      alert("Invalid quantity.");
+      return;
+    }
+
+    // 3. Update cart (via updateQuantity from cart.js)
+    updateQuantity(productId, newQuantity);
 
     // 4. Update label on screen
     document.querySelector(`.js-quantity-label-${productId}`).innerText =
@@ -238,8 +246,5 @@ saveButtons.forEach((button) => {
 
     // 5. Update checkout header
     updateCheckoutQuantity();
-
-    // 6. Save to localStorage (if used in your project)
-    localStorage.setItem('cart', JSON.stringify(cart));
   });
 });

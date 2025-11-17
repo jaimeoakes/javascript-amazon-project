@@ -52,6 +52,15 @@ export function removeFromCart(productId) {
     saveToStorage();
 }
 
+export function updateQuantity(productId, newQuantity) {
+  cart.forEach((item) => {
+    if (item.productId === productId) {
+      item.quantity = newQuantity;
+    }
+  });
+
+  saveToStorage();
+}
 
 export function totalCartQuantity() {
   let total = 0;
@@ -59,5 +68,6 @@ export function totalCartQuantity() {
   cart.forEach((product) => {
     total += product.quantity;
   });
+
   return total;
 }
