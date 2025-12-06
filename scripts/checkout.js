@@ -1,4 +1,4 @@
-import { cart, removeFromCart, updateQuantity } from "../data/cart.js";
+import { cart, removeFromCart, updateQuantity, updateDeliveryOption } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js"; 
 import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
@@ -12,10 +12,6 @@ const today = dayjs();
 const deliveryDate = today.add(7, 'days');
 
 console.log(deliveryDate.format('dddd, MMMM D'));
-
-/******************************************
- * RENDER ORDER SUMMARY (cart items)
- ******************************************/
 
 let cartSummaryHTML = '';
 
@@ -132,7 +128,9 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
     const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
     html += ` 
-      <div class="delivery-option">
+      <div class="delivery-option js-delivery-option"
+        data-product-id="${matchingProduct.id}"
+        data-delivery-option-id="${deliveryOption.id}">
         <input type="radio"
           ${isChecked ? 'checked' : ''}
           class="delivery-option-input"
@@ -148,16 +146,10 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
       </div>
     `
   });
-
     return html;
 }
 
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
-
-
-/******************************************
- * DELETE BUTTONS
- ******************************************/
 
 document.querySelectorAll('.js-delete-link')
   .forEach((buttonDelete) => {
@@ -165,13 +157,10 @@ document.querySelectorAll('.js-delete-link')
 
       const productId = buttonDelete.dataset.productId;
 
-      // 1. Remove from cart
       removeFromCart(productId);
 
-      // 2. Update checkout number
       updateCheckoutQuantity();
 
-      // 3. Remove from page
       const container = document.querySelector(
         `.js-cart-item-container-${productId}`
       );
@@ -180,12 +169,6 @@ document.querySelectorAll('.js-delete-link')
     });
   });
 
-
-
-/******************************************
- * UPDATE CHECKOUT TITLE QUANTITY
- ******************************************/
-
 function updateCheckoutQuantity() {
   let checkoutCartQuantity = 0;
 
@@ -193,7 +176,6 @@ function updateCheckoutQuantity() {
     checkoutCartQuantity += product.quantity;
   });
 
-  // Update the checkout title
   document.querySelector('.js-checkout-quantity').innerHTML = `
     Checkout (
       <a class="return-to-home-link"
@@ -202,14 +184,7 @@ function updateCheckoutQuantity() {
   `;
 }
 
-// Run once on page load
 updateCheckoutQuantity();
-
-
-
-/******************************************
- * UPDATE BUTTON – ENTER EDIT MODE
- ******************************************/
 
 const buttonsUpdate = document.querySelectorAll('.js-update-link');
 
@@ -224,7 +199,6 @@ buttonsUpdate.forEach((buttonUpdate) => {
 
     container.classList.add("is-editing-quantity");
 
-    // 🔥 PREENCHE O INPUT COM A QUANTIDADE ATUAL
     const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);
     const input = document.querySelector(`.js-quantity-input-${productId}`);
 
@@ -232,12 +206,6 @@ buttonsUpdate.forEach((buttonUpdate) => {
     input.focus();
   });
 });
-
-
-
-/******************************************
- * SAVE BUTTON – EXIT EDIT MODE + UPDATE DATA
- ******************************************/
 
 const saveButtons = document.querySelectorAll('.js-save-link');
 
@@ -250,10 +218,8 @@ saveButtons.forEach((button) => {
       `.js-cart-item-container-${productId}`
     );
 
-    // 1. Exit editing mode
     container.classList.remove("is-editing-quantity");
 
-    // 2. Get new quantity
     const input = document.querySelector(
       `.js-quantity-input-${productId}`
     );
@@ -265,14 +231,19 @@ saveButtons.forEach((button) => {
       return;
     }
 
-    // 3. Update cart (via updateQuantity from cart.js)
     updateQuantity(productId, newQuantity);
 
-    // 4. Update label on screen
     document.querySelector(`.js-quantity-label-${productId}`).innerText =
       newQuantity;
 
-    // 5. Update checkout header
     updateCheckoutQuantity();
   });
 });
+
+document.querySelectorAll('.js-delivery-option')
+  .forEach((element) => {
+    element.addEventListener('click', () => {
+      const {productId, deliveryOptionId} = element.dataset;
+      updateDeliveryOption(productId, deliveryOptionId);
+    });
+  });
