@@ -143,11 +143,7 @@ export function renderOrderSummary() {
 
         updateCheckoutQuantity();
 
-        const container = document.querySelector(
-          `.js-cart-item-container-${productId}`
-        );
-
-        container.remove();
+        renderOrderSummary();
 
         renderPaymentSummary();
       });
