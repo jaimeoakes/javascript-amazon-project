@@ -1,10 +1,10 @@
 import { cart, removeFromCart, updateQuantity, updateDeliveryOption } from "../../data/cart.js";
-import { products, getProduct } from "../../data/products.js";
+import { getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js"; 
-import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderCheckoutHeader } from "./checkoutHeader.js";
 
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
@@ -140,31 +140,14 @@ export function renderOrderSummary() {
         const productId = buttonDelete.dataset.productId;
 
         removeFromCart(productId);
-
-        updateCheckoutQuantity();
-
+        renderCheckoutHeader();
         renderOrderSummary();
-
         renderPaymentSummary();
+
       });
     });
 
-  function updateCheckoutQuantity() {
-    let checkoutCartQuantity = 0;
-
-    cart.forEach((product) => {
-      checkoutCartQuantity += product.quantity;
-    });
-
-    document.querySelector('.js-checkout-quantity').innerHTML = `
-      Checkout (
-        <a class="return-to-home-link"
-          href="amazon.html">${checkoutCartQuantity}</a>
-      )
-    `;
-  }
-
-  updateCheckoutQuantity();
+  
 
   const buttonsUpdate = document.querySelectorAll('.js-update-link');
 
@@ -217,6 +200,7 @@ export function renderOrderSummary() {
         newQuantity;
 
       updateCheckoutQuantity();
+
     });
   });
 
