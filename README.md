@@ -1,97 +1,106 @@
-# 🛒 Amazon E-Commerce Project (In Progress)
+# 🛒 Amazon E-Commerce Project (JavaScript)
 
-This is my ongoing JavaScript e-commerce project, inspired by the Amazon shopping experience.  
-The goal is to build a complete front-end shopping flow using HTML, CSS and JavaScript, following clean code structure and modular logic.  
-This project is still in development — new features are being added every week.
+Amazon-inspired e-commerce front-end project built with **vanilla JavaScript**, focusing on clean architecture, modular logic, localStorage persistence, and unit testing with Jasmine.
+
+This project is part of my JavaScript learning journey and is actively evolving as new concepts are introduced.
 
 ---
 
-## 🚀 Features Implemented So Far
+## 🚀 Features
 
 ### ✔️ Product Rendering
 - Products loaded from `data/products.js`
-- Clean UI layout
-- Rating stars, product images and price formatting
+- Dynamic HTML generation
+- Product images, ratings, prices and quantity selector
 
 ### ✔️ Shopping Cart System
-- Add to Cart
-- Increase / decrease item quantity
-- Real-time cart badge update
-- Cart saved in LocalStorage
-- Cart structure stored in `data/cart.js`
+- Add new products to the cart
+- Increase quantity for existing products
+- Cart state persisted using `localStorage`
+- Delivery option support
+- Cart quantity indicator in header
 
-### ✔️ Checkout Logic
-- Delivery options
-- Updating the order summary
-- Editing quantities directly in the checkout page
-- Showing total items + total cost
+### ✔️ Clean Architecture
+- Business logic separated from UI logic
+- Cart logic isolated inside `data/cart.js`
+- DOM manipulation handled only in `scripts/`
 
-### ✔️ Multi-Page Structure
-- `amazon.html` — Main shopping page  
-- `checkout.html` — Cart + delivery page  
-- `orders.html` — Past orders  
-- `tracking.html` — Order tracking page  
-
-### ✔️ Utilities
-- `scripts/utils/money.js` for price formatting
-- Clean modular JavaScript file structure
+### ✔️ Unit Testing (Jasmine)
+- Unit tests for cart logic and utility functions
+- Mocking `localStorage` using `spyOn`
+- Tests validate both state changes and side effects
+- Proper mock order to avoid false positives
 
 ---
 
-## 📁 Folder Structure
+## 🧪 Tests
+
+This project uses **Jasmine** for unit testing.
+
+### How to run tests:
+1. Open `tests-jasmine/tests.html` in your browser
+2. All specs should pass with no failures
+
+Current test coverage includes:
+- `formatCurrency` utility
+- `addToCart` logic (new and existing products)
+
+---
+
+## 📁 Project Structure
 
 ```
 javascript-amazon-project/
 │
-├── backend/
 ├── data/
 │ ├── cart.js
 │ ├── products.js
-│ └── products.json
-│
-├── images/
-│ └── products/
-│ (all product images)
+│ └── deliveryOptions.js
 │
 ├── scripts/
 │ ├── amazon.js
 │ ├── checkout.js
-│ ├── utils/
+│ ├── checkout/
+│ │ ├── checkoutHeader.js
+│ │ ├── orderSummary.js
+│ │ └── paymentSummary.js
+│ └── utils/
 │ └── money.js
 │
-├── styles/
-│ ├── amazon.css
-│ ├── orders.css
-│ ├── tracking.css
-│ └── pages/checkout/
-│ ├── checkout.css
-│ ├── checkout-header.css
+├── tests-jasmine/
+│ ├── data/
+│ │ └── cartTest.js
+│ ├── utils/
+│ │ └── moneyTest.js
+│ └── tests.html
 │
-├── amazon.html
+├── styles/
+├── images/
+│
+├── index.html
 ├── checkout.html
 ├── orders.html
-└── tracking.html
+├── tracking.html
+└── README.md
 
 ```
 ---
 
 ## 🛠️ Technologies Used
-- HTML5  
-- CSS3  
-- JavaScript (ES6+)  
-- LocalStorage  
-- Modular script organization  
-- Git & GitHub  
+- JavaScript (ES6+)
+- HTML5
+- CSS3
+- Jasmine (Unit Testing)
+- localStorage API
 
 ---
 
-## 📌 To-Do (Next steps)
-- Improve delivery options calculation  
-- Add product filters  
-- Implement search bar  
-- Finalize orders + tracking logic  
-- Add backend simulation  
-- Improve mobile responsiveness  
+## 📌 Next Steps (Planned)
+- Improve checkout logic
+- Expand cart test coverage
+- Add order history handling
+- Improve UI responsiveness
+- Add filtering and search functionality
 
 ---
 
