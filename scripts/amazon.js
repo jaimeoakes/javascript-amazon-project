@@ -1,6 +1,6 @@
-import { addToCart, totalCartQuantity } from "../data/cart.js";
+import { cart } from "../data/cart-class.js";
 import { products } from "../data/products.js";
-import { formatCurrency } from "./utils/money.js";  
+import { formatCurrency } from "./utils/money.js";
 
 let productsHTML = '';
 
@@ -67,7 +67,7 @@ function updateCartQuantity() {
   const headerElement = document.querySelector('.js-cart-quantity');
 
   if (headerElement) {
-    headerElement.innerHTML = totalCartQuantity();
+    headerElement.innerHTML = cart.totalCartQuantity();
   }
 }
 
@@ -83,7 +83,8 @@ buttons.forEach((button) => {
     );
     const quantity = Number(quantitySelector.value);
 
-    addToCart(productId, quantity);
+    // ⬇️ agora usamos a classe Cart
+    cart.addToCart(productId, quantity);
     updateCartQuantity();
 
     const addedMessage = document.querySelector(
