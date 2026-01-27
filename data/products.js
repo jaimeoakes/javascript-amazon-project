@@ -41,7 +41,7 @@ class Product {
 }
 
 class Clothing extends Product {
-  sizeChartLink;
+  sizeChartLink; // this.sizeChartLink = productDetails.sizeChartLink;
 
   constructor(productDetails) {
     super(productDetails);
