@@ -1,8 +1,9 @@
-import { cart } from "../../data/cart.js";
+import { cart } from "../../data/cart-class.js";
 
 export function renderCheckoutHeader() {
   let cartQuantity = 0;
-  cart.forEach((cartItem) => {
+
+  cart.cartItems.forEach((cartItem) => {
     cartQuantity += cartItem.quantity;
   });
 
@@ -18,8 +19,7 @@ export function renderCheckoutHeader() {
       <div class="checkout-header-middle-section js-checkout-quantity">
         Checkout (<a class="return-to-home-link"
         href="amazon.html">${cartQuantity} items</a>)
-    </div>
-
+      </div>
 
       <div class="checkout-header-right-section">
         <img src="images/icons/checkout-lock-icon.png">
@@ -27,6 +27,5 @@ export function renderCheckoutHeader() {
     </div>
   `;
 
-  document.querySelector(".js-checkout-header")
-    .innerHTML = checkoutHeaderHTML;
+  document.querySelector(".js-checkout-header").innerHTML = checkoutHeaderHTML;
 }
