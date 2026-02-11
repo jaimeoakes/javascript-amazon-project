@@ -1,13 +1,70 @@
 import { cart } from "../data/cart-class.js";
 import { products, loadProducts } from "../data/products.js";
 
+// --- SEARCH 
+function getSearchFromUrl() {
+  const url = new URL(window.location.href);
+  const search = url.searchParams.get("search");
+  return search ? search.trim() : "";
+}
+
+function goToSearch(searchValue) {
+  const value = searchValue.trim();
+  if (!value) {
+    window.location.href = "index.html";
+    return;
+  }
+  window.location.href = `index.html?search=${encodeURIComponent(value)}`;
+}
+
+function setupSearchBar() {
+  const input = document.querySelector(".search-bar");
+  const button = document.querySelector(".search-button");
+  if (!input || !button) return;
+
+  // Preenche input com o search da URL
+  const search = getSearchFromUrl();
+  if (search) input.value = search;
+
+  button.addEventListener("click", () => {
+    goToSearch(input.value);
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      goToSearch(input.value);
+    }
+  });
+}
+// --- END SEARCH ---
+
 loadProducts(renderProductsGrid);
 
 function renderProductsGrid() {
+  setupSearchBar();
 
-  let productsHTML = '';
+  const search = getSearchFromUrl();
+  const lowerSearch = search.toLowerCase();
 
-  products.forEach((product) => {
+  let filteredProducts = products;
+
+  if (search) {
+    filteredProducts = products.filter((product) => {
+      const nameMatch = product.name
+        .toLowerCase()
+        .includes(lowerSearch);
+
+      const keywordMatch = (product.keywords || []).some((keyword) =>
+        String(keyword).toLowerCase().includes(lowerSearch)
+      );
+
+      return nameMatch || keywordMatch;
+    });
+  }
+
+  let productsHTML = "";
+
+  filteredProducts.forEach((product) => {
     productsHTML += `
       <div class="product-container">
         <div class="product-image-container">
@@ -64,21 +121,20 @@ function renderProductsGrid() {
     `;
   });
 
-  document.querySelector('.js-products-grid').innerHTML = productsHTML;
+  document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
   function updateCartQuantity() {
-    const headerElement = document.querySelector('.js-cart-quantity');
-
+    const headerElement = document.querySelector(".js-cart-quantity");
     if (headerElement) {
       headerElement.innerHTML = cart.totalCartQuantity();
     }
   }
 
   const addedMessageTimeoutIds = {};
-  const buttons = document.querySelectorAll('.js-add-to-cart');
+  const buttons = document.querySelectorAll(".js-add-to-cart");
 
   buttons.forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener("click", () => {
       const { productId } = button.dataset;
 
       const quantitySelector = document.querySelector(
@@ -86,7 +142,6 @@ function renderProductsGrid() {
       );
       const quantity = Number(quantitySelector.value);
 
-      // ⬇️ agora usamos a classe Cart
       cart.addToCart(productId, quantity);
       updateCartQuantity();
 
